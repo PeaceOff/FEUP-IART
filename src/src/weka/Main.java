@@ -33,6 +33,7 @@ public class Main {
         System.out.println(dataSetTrain.toSummaryString());
 
         J48 tree= new J48();
+        //do the training
         tree.buildClassifier(dataSetTrain);
 
         Instances labeled= new Instances(dataSetTest);
