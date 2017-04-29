@@ -66,7 +66,8 @@ public class App {
             reader.close();
 
             log.setText(dataSetTrain.toSummaryString());
-            //System.out.println(dataSetTrain.toSummaryString());
+
+
 
             tree= new J48();
             //do the training
@@ -91,7 +92,6 @@ public class App {
     }
 
     public  static void main(String [] args) throws Exception {
-        System.out.println("Aplicação de ID3 ou C4.5 para a predição de bancarrota em companhias polacas\n");
 
         JFrame frame = new JFrame("App");
         App app = new App();
