@@ -14,7 +14,7 @@ import java.io.FileWriter;
 
 public class Main {
 
-    public  static void main(String [] args) throws Exception {
+    public  static void main(String [] args) throws Exception {/*
         System.out.println("Aplicação de ID3 ou C4.5 para a predição de bancarrota em companhias polacas\n");
 
 
@@ -24,11 +24,6 @@ public class Main {
         dataSetTrain.setClassIndex(dataSetTrain.numAttributes() - 1);
 
         reader.close();
-
-
-
-
-
 
 
 
@@ -75,7 +70,7 @@ public class Main {
 
         jf.setVisible(true);
         tv.fitToScreen();
-
+*/
 
 
     }
