@@ -7,6 +7,9 @@ import weka.core.Instances;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by joao on 5/6/17.
@@ -30,12 +33,13 @@ public class TreeHandler {
             if( classified == test.instance(i).classValue())
                 success++;
 
-            test.instance(i).
         }
         return success/(double)test.numInstances();
     }
 
-
+    public J48 getTree(int index){
+        return trees[index];
+    }
     private void loadTree(int i , String folderPath) {
 
         String file = folderPath + "/" + i + "year.arff";
@@ -63,7 +67,7 @@ public class TreeHandler {
             }
 
             res = new J48();
-            res.buildClassifier(train, );
+            res.buildClassifier(train);
             fiability = fiability(res, test);
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,6 +111,21 @@ public class TreeHandler {
         StringBuilder sb = new StringBuilder();
 
         sb.append(tree.binarySplitsTipText());
+
+        String treeStr = tree.toString();
+
+
+        Matcher p = Pattern.compile("Attr\\d+").matcher(treeStr);
+
+        List<String> matches = new ArrayList<String>();
+
+        while(p.find()) {
+            System.out.println(p.group());
+            System.out.println(AttributeMapper.getAttributeName(p.group()));
+            treeStr = treeStr.replace(p.group(), AttributeMapper.getAttributeName(p.group()));
+        }
+
+        sb.append(treeStr);
 
         return sb.toString();
     }
