@@ -31,11 +31,11 @@ public class App {
 
         try {
 
-            year1Button.addActionListener(new buttonHandler(handler.determineTree(1) ,handler.getTree(1)));
-            year2Button.addActionListener(new buttonHandler(handler.determineTree(2) ,handler.getTree(2)));
-            year3Button.addActionListener(new buttonHandler(handler.determineTree(3) ,handler.getTree(3)));
-            year4Button.addActionListener(new buttonHandler(handler.determineTree(4) ,handler.getTree(4)));
-            year5Button.addActionListener(new buttonHandler(handler.determineTree(5) ,handler.getTree(5)));
+            year1Button.addActionListener(new buttonHandler(1));
+            year2Button.addActionListener(new buttonHandler(2));
+            year3Button.addActionListener(new buttonHandler(3));
+            year4Button.addActionListener(new buttonHandler(4));
+            year5Button.addActionListener(new buttonHandler(5));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,12 +45,9 @@ public class App {
 
     public class buttonHandler implements ActionListener {
 
-        String msg;
-        J48 tree;
-
-        public buttonHandler(String msg, J48 tree) {
-            this.msg = msg;
-            this.tree = tree;
+        int index = 0;
+        public buttonHandler(int i) {
+            index = i;
         }
 
         @Override
@@ -71,7 +68,9 @@ public class App {
                 else
                     options[0] = "";
 
-                tree.setOptions(options);
+                handler.loadTree(index, options);
+
+                J48 tree = handler.getTree(index);
 
                 tv = new TreeVisualizer(null,tree.graph(), new PlaceNode2());
 
@@ -84,6 +83,8 @@ public class App {
 
                 jf.setVisible(true);
                 tv.fitToScreen();
+
+                String msg = handler.determineTree(index);
 
                 log.setText(null);
                 log.append(msg);

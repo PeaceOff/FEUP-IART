@@ -17,11 +17,12 @@ public class TreeHandler {
 
     private J48 trees[] = new J48[]{null,null,null,null,null};
     private Double fiabilities[] = new Double[]{0.0,0.0,0.0,0.0,0.0};
-
+    private String lastFolderPath = "";
     private ArrayList<String> d = new ArrayList<>();
 
     public TreeHandler(String folderPath){
         loadTrees(folderPath);
+        lastFolderPath = folderPath;
     }
 
     private double fiability(J48 tree, Instances test) throws Exception {
@@ -31,6 +32,7 @@ public class TreeHandler {
             if( classified == test.instance(i).classValue())
                 success++;
         }
+        System.out.println(test.numInstances());
         return success/(double)test.numInstances();
     }
 
@@ -38,7 +40,11 @@ public class TreeHandler {
         return trees[index-1];
     }
 
-    private void loadTree(int i , String folderPath) {
+    public void loadTree(int i, String[] options){
+    loadTree(i,lastFolderPath, options );
+    }
+
+    private void loadTree(int i , String folderPath, String[] options) {
 
         String file = folderPath + "/" + i + "year.arff";
         Instances train = null;
@@ -65,6 +71,7 @@ public class TreeHandler {
             }
 
             res = new J48();
+            res.setOptions(options);
             res.buildClassifier(train);
             fiability = fiability(res, test);
         } catch (IOException e) {
@@ -80,7 +87,7 @@ public class TreeHandler {
     private void loadTrees(String folderPath){
 
         for(int i = 1 ; i <= trees.length; i++){
-            loadTree(i,folderPath);
+            loadTree(i,folderPath, null);
         }
     }
 
@@ -115,10 +122,7 @@ public class TreeHandler {
 
         Matcher p = Pattern.compile("Attr\\d+").matcher(treeStr);
 
-
         while(p.find()) {
-            System.out.println(p.group());
-            System.out.println(AttributeMapper.getAttributeName(p.group()));
             treeStr = treeStr.replace(p.group(), AttributeMapper.getAttributeName(p.group()));
         }
 
