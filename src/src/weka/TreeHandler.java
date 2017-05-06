@@ -11,9 +11,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by joao on 5/6/17.
- */
+
 public class TreeHandler {
 
 
@@ -32,14 +30,14 @@ public class TreeHandler {
             double classified = tree.classifyInstance(test.instance(i));
             if( classified == test.instance(i).classValue())
                 success++;
-
         }
         return success/(double)test.numInstances();
     }
 
     public J48 getTree(int index){
-        return trees[index];
+        return trees[index-1];
     }
+
     private void loadTree(int i , String folderPath) {
 
         String file = folderPath + "/" + i + "year.arff";
@@ -106,7 +104,7 @@ public class TreeHandler {
 
     public String determineTree(int i){
 
-        J48 tree = trees[i];
+        J48 tree = trees[i-1];
 
         StringBuilder sb = new StringBuilder();
 
@@ -117,7 +115,6 @@ public class TreeHandler {
 
         Matcher p = Pattern.compile("Attr\\d+").matcher(treeStr);
 
-        List<String> matches = new ArrayList<String>();
 
         while(p.find()) {
             System.out.println(p.group());

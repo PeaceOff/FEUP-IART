@@ -2,9 +2,7 @@ package weka;
 
 import java.util.HashMap;
 
-/**
- * Created by PeaceOff on 06-05-2017.
- */
+
 public class AttributeMapper {
 
     private static HashMap<String ,String> attributes = null;

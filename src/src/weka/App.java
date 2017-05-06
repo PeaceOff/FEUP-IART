@@ -13,101 +13,84 @@ import java.awt.event.ActionListener;
 import java.io.*;
 
 public class App {
-    private JButton treeBtn;
     private JPanel panel;
     private JTextArea log;
-    private J48 tree;
+    private JButton year1Button;
+    private JButton year4Button;
+    private JButton year3Button;
+    private JButton year2Button;
+    private JButton year5Button;
+    private JCheckBox unprunedCheckBox;
+    private JCheckBox checkBox2;
+    private JCheckBox checkBox3;
+    private JCheckBox checkBox4;
+
+    private TreeHandler handler;
+
 
     public App() {
-        treeBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
 
-                try {
-                    // display classifier
-                    final javax.swing.JFrame jf = new javax.swing.JFrame("Aplicação de ID3 ou C4.5 para a predição de bancarrota em companhias polacas");
-                    jf.setSize(1920,1080);
-                    jf.getContentPane().setLayout(new BorderLayout());
-                    TreeVisualizer tv = null;
-                    tv = new TreeVisualizer(null,tree.graph(), new PlaceNode2());
-
-                    jf.getContentPane().add(tv, BorderLayout.CENTER);
-                    jf.addWindowListener(new java.awt.event.WindowAdapter() {
-                        public void windowClosing(java.awt.event.WindowEvent e) {
-                            jf.dispose();
-                        }
-                    });
-
-                    jf.setVisible(true);
-                    tv.fitToScreen();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-        });
-    }
-
-    public void init(){
-
-        TreeHandler handler = new TreeHandler("dataset/");
+        init();
 
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("dataset/1year.arff"));
-            Instances dataSetTrain = new Instances(reader);
-            //set the attribute for classification in this case it's 65
-            dataSetTrain.setClassIndex(dataSetTrain.numAttributes() - 1);
-            reader.close();
-
-            new Instances(dataSetTrain, 0, dataSetTrain.numInstances()/2);
-
-
-            reader = new BufferedReader(new FileReader("dataset/2year.arff"));
-            Instances dataSetTest = new Instances(reader);
-            //set the attribute for classification in this case it's 65
-            dataSetTest.setClassIndex(dataSetTest.numAttributes() - 1);
-
-            reader.close();
-
-            log.setText(dataSetTrain.toSummaryString());
-
-
-
-            tree= new J48();
-            //do the training
-            tree.buildClassifier(dataSetTrain);
-
-            Instances labeled= new Instances(dataSetTest);
-
-            //label the test instances
-            for (int i = 0 ; i < dataSetTest.numInstances() ; i++){
-            double clsLabel = tree.classifyInstance(dataSetTest.instance(i));
-            labeled.instance(i).setClassValue(clsLabel);
-            }
-
-            //save the new instance
-
-            BufferedWriter writer = new BufferedWriter(new FileWriter("test/labeled.arff"));
-            writer.write(labeled.toString());
+            year1Button.addActionListener(new buttonHandler(handler.determineTree(1) ,handler.getTree(1).graph()));
+            year2Button.addActionListener(new buttonHandler(handler.determineTree(2) ,handler.getTree(2).graph()));
+            year3Button.addActionListener(new buttonHandler(handler.determineTree(3) ,handler.getTree(3).graph()));
+            year4Button.addActionListener(new buttonHandler(handler.determineTree(4) ,handler.getTree(4).graph()));
+            year5Button.addActionListener(new buttonHandler(handler.determineTree(5) ,handler.getTree(5).graph()));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        log.append(handler.toString());
-        log.append("\n\n");
-        log.append(handler.determineTree(0));
+    }
+
+    public class buttonHandler implements ActionListener {
+
+        String msg;
+        String tree;
+
+        public buttonHandler(String msg, String tree) {
+            this.msg = msg;
+            this.tree = tree;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            // display classifier
+            final javax.swing.JFrame jf = new javax.swing.JFrame("Tree view");
+            jf.setSize(1920,1080);
+            jf.getContentPane().setLayout(new BorderLayout());
+            TreeVisualizer tv = null;
+            tv = new TreeVisualizer(null,tree, new PlaceNode2());
+
+            jf.getContentPane().add(tv, BorderLayout.CENTER);
+            jf.addWindowListener(new java.awt.event.WindowAdapter() {
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    jf.dispose();
+                }
+            });
+
+            jf.setVisible(true);
+            tv.fitToScreen();
+
+            log.setText(null);
+            log.append(msg);
+            log.append("Fiability of all years");
+            log.append(handler.toString());
+        }
+    }
+
+    private void init(){
+        handler = new TreeHandler("dataset/");
     }
 
     public  static void main(String [] args) throws Exception {
 
-        JFrame frame = new JFrame("App");
+        JFrame frame = new JFrame("IART@FEUP");
         App app = new App();
-        app.init();
+
         frame.setContentPane(app.panel);
-
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
