@@ -1,5 +1,6 @@
 package weka;
 
+import sun.reflect.generics.tree.Tree;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;
 import weka.gui.treevisualizer.PlaceNode2;
@@ -50,12 +51,16 @@ public class App {
 
     public void init(){
 
+        TreeHandler handler = new TreeHandler("dataset/");
+
         try {
             BufferedReader reader = new BufferedReader(new FileReader("dataset/1year.arff"));
             Instances dataSetTrain = new Instances(reader);
             //set the attribute for classification in this case it's 65
             dataSetTrain.setClassIndex(dataSetTrain.numAttributes() - 1);
             reader.close();
+
+            new Instances(dataSetTrain, 0, dataSetTrain.numInstances()/2);
 
 
             reader = new BufferedReader(new FileReader("dataset/2year.arff"));
@@ -86,9 +91,13 @@ public class App {
             BufferedWriter writer = new BufferedWriter(new FileWriter("test/labeled.arff"));
             writer.write(labeled.toString());
 
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        log.append(handler.toString());
+        log.append("\n\n");
+        log.append(handler.determineTree(0));
     }
 
     public  static void main(String [] args) throws Exception {
