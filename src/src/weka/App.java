@@ -118,7 +118,6 @@ public class App {
 
                         options.add("-M");
                         options.add((minimumNumberOfInstances.getValue()).toString());
-                        System.out.println((minimumNumberOfInstances.getValue()).toString());
                 }
 
 
