@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-/**
- * Created by PeaceOff on 07-05-2017.
- */
 public class Query {
 
     private JFrame frame;
@@ -27,10 +24,10 @@ public class Query {
     private ArrayList<JTextField> attr_values = new ArrayList<JTextField>();
     private TreeHandler handler;
 
-    public Query(JFrame frame,TreeHandler handler) {
+    public Query(TreeHandler handler) {
 
         this.handler = handler;
-        this.frame = frame;
+        this.frame = new JFrame("Evaluate your company");
         panel_1 = new JPanel();
         GridBagLayout gl = new GridBagLayout();
         constraints = new GridBagConstraints();
@@ -38,7 +35,7 @@ public class Query {
         constraints.gridheight = 1;
         panel_1.setLayout(gl);
 
-        //panel_1.setLayout(new GridLayout(64, 5, 0, 1));
+
         JScrollPane jsPane = new JScrollPane(panel_1);
 
         JButton button_1 = new JButton("Year 1");
@@ -62,10 +59,12 @@ public class Query {
         this.frame.add(panel_2,BorderLayout.EAST);
 
         this.frame.add(jsPane);
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setSize(500, 600);
         this.frame.setLocationRelativeTo(null);
         this.frame.setVisible(true);
+
+        init();
     }
 
     public class buttonHandler implements ActionListener {

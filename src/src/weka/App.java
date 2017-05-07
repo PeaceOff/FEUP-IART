@@ -5,12 +5,17 @@ import weka.gui.treevisualizer.PlaceNode2;
 import weka.gui.treevisualizer.TreeVisualizer;
 
 import javax.swing.*;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class App {
+
     private JPanel panel;
     private JTextArea log;
     private JButton year1Button;
@@ -21,15 +26,16 @@ public class App {
     private JCheckBox unprunedCheckBox;
     private JCheckBox reducedErrorPruningCheckBox;
     private JCheckBox subTreeRaisingCheckBox;
-    private JTextField pruningConfidence;
-    private JTextField minimumNumberOfInstances;
+    private JFormattedTextField pruningConfidence;
+    private JFormattedTextField minimumNumberOfInstances;
+    private JButton checkYourOwnCompanyButton;
 
     private TreeHandler handler;
 
 
     public App() {
 
-        init();
+        handler = new TreeHandler("dataset/");
 
         try {
 
@@ -66,6 +72,12 @@ public class App {
                 subTreeRaisingCheckBox.setEnabled(val);
                 pruningConfidence.setEnabled(val);
                 minimumNumberOfInstances.setEnabled(val);
+            }
+        });
+        checkYourOwnCompanyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Query query = new Query(handler);
             }
         });
     }
@@ -138,9 +150,6 @@ public class App {
         }
     }
 
-    private void init(){
-        handler = new TreeHandler("dataset/");
-    }
 
     public  static void main(String [] args) throws Exception {
 
