@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class App {
     private JPanel panel;
@@ -18,9 +19,10 @@ public class App {
     private JButton year2Button;
     private JButton year5Button;
     private JCheckBox unprunedCheckBox;
-    private JCheckBox checkBox2;
-    private JCheckBox checkBox3;
-    private JCheckBox checkBox4;
+    private JCheckBox reducedErrorPruningCheckBox;
+    private JCheckBox subTreeRaisingCheckBox;
+    private JTextField pruningConfidence;
+    private JTextField minimumNumberOfInstances;
 
     private TreeHandler handler;
 
@@ -41,6 +43,30 @@ public class App {
             e.printStackTrace();
         }
 
+        unprunedCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                boolean val = !unprunedCheckBox.isSelected();
+
+
+                reducedErrorPruningCheckBox.setEnabled(val);
+                subTreeRaisingCheckBox.setEnabled(val);
+                pruningConfidence.setEnabled(val);
+                minimumNumberOfInstances.setEnabled(val);
+            }
+        });
+        reducedErrorPruningCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                boolean val = !reducedErrorPruningCheckBox.isSelected();
+
+                unprunedCheckBox.setEnabled(val);
+                subTreeRaisingCheckBox.setEnabled(val);
+                pruningConfidence.setEnabled(val);
+                minimumNumberOfInstances.setEnabled(val);
+            }
+        });
     }
 
     public class buttonHandler implements ActionListener {
@@ -60,15 +86,29 @@ public class App {
                 TreeVisualizer tv = null;
 
                 //set option
-                String[] options = new String[1];
+                ArrayList<String> options= new ArrayList();
 
 
                 if(unprunedCheckBox.isSelected())
-                    options[0] = "-U";
-                else
-                    options[0] = "";
+                    options.add("-U");
+                else if (reducedErrorPruningCheckBox.isSelected())
+                    options.add("-R");
+                else{
+                    if (!subTreeRaisingCheckBox.isSelected())
+                        options.add("-S");
 
-                handler.loadTree(index, options);
+                        options.add("-C");
+                        options.add(pruningConfidence.getText());
+
+                        options.add("-M");
+                        options.add(minimumNumberOfInstances.getText());
+                }
+
+
+
+                System.out.println(options.toArray(new String[0]));
+
+                handler.loadTree(index, options.toArray(new String[0]));
 
                 J48 tree = handler.getTree(index);
 
