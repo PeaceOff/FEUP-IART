@@ -1,8 +1,7 @@
 package weka;
 
 import weka.classifiers.trees.J48;
-import weka.core.Instance;
-import weka.core.Instances;
+import weka.core.*;
 import weka.gui.treevisualizer.PlaceNode2;
 import weka.gui.treevisualizer.TreeVisualizer;
 
@@ -26,9 +25,11 @@ public class Query {
     private JPanel panel_1;
     GridBagConstraints constraints;
     private ArrayList<JTextField> attr_values = new ArrayList<JTextField>();
+    private TreeHandler handler;
 
-    public Query(JFrame frame) {
+    public Query(JFrame frame,TreeHandler handler) {
 
+        this.handler = handler;
         this.frame = frame;
         panel_1 = new JPanel();
         GridBagLayout gl = new GridBagLayout();
@@ -78,16 +79,33 @@ public class Query {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
 
-            System.out.println("Clicked Year " + year);
-
-            ArrayList<Double> values = get_values();
-
-            for(Double d : values) {
-                System.out.print("|" + d +"|");
+            Instance values = get_instance();
+            Double res = null;
+            try {
+                 res = handler.getTree(year).classifyInstance(values);
+            } catch (Exception e) {
+                System.out.println("Could not fetch results!");
             }
 
-            JOptionPane.showMessageDialog(frame,"Eggs are not supposed to be green.");
+            if(res != null){
+                if(res == 1.0){
+                    JOptionPane.showMessageDialog(frame,"Bankrupcy in " + (6 - year) + " years!");
+                } else {
+                    JOptionPane.showMessageDialog(frame,"No Bankrupcy in " + (6 - year) + " years!");
+                }
+            }
         }
+    }
+
+    private Instance get_instance(){
+
+        ArrayList<Double> values = get_values();
+
+        for(int i = 0; i < 64; i++){
+            TreeHandler.scoopy_potato.setValue(i,values.get(i));
+        }
+
+        return TreeHandler.scoopy_potato;
     }
 
     private void add_text(int i, String label_text, String value){
@@ -95,8 +113,8 @@ public class Query {
         JLabel label = new JLabel(label_text);
         label.setToolTipText(value);
         NumberFormat f = NumberFormat.getNumberInstance();
-        f.setMaximumFractionDigits(21);
-        f.setMinimumFractionDigits(9);
+        f.setMaximumFractionDigits(14);
+        f.setMinimumFractionDigits(5);
         JFormattedTextField text_field = new JFormattedTextField(f);
 
         constraints.gridy = i;
@@ -112,6 +130,7 @@ public class Query {
         constraints.gridx = 1;
         constraints.gridwidth = 4;
         panel_1.add(text_field,constraints);
+
         attr_values.add(text_field);
     }
 
@@ -123,7 +142,7 @@ public class Query {
             if(tf.getText().equals(""))
                 res.add(0.0);
             else
-                res.add(Double.parseDouble(tf.getText()));
+                res.add(Double.parseDouble(tf.getText().replace(".","").replace(',','.')));
         }
         return res;
     }

@@ -2,6 +2,7 @@ package weka;
 
 import jdk.internal.util.xml.impl.Input;
 import weka.classifiers.trees.J48;
+import weka.core.Instance;
 import weka.core.Instances;
 
 import java.io.*;
@@ -19,6 +20,7 @@ public class TreeHandler {
     private Double fiabilities[] = new Double[]{0.0,0.0,0.0,0.0,0.0};
     private String lastFolderPath = "";
     private ArrayList<String> d = new ArrayList<>();
+    public static Instance scoopy_potato;
 
     public TreeHandler(String folderPath){
         loadTrees(folderPath);
@@ -57,6 +59,8 @@ public class TreeHandler {
 
             train = new Instances(bf);
             train.setClassIndex(train.numAttributes() - 1);
+
+            scoopy_potato = train.get(0);
 
             test = new Instances(train, train.numInstances()/2);
 

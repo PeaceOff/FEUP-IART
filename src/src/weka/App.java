@@ -54,7 +54,7 @@ public class App {
         });
     }
 
-    public static void createFrame()
+    public void createFrame()
     {
         EventQueue.invokeLater(new Runnable()
         {
@@ -62,7 +62,7 @@ public class App {
             public void run()
             {
                 JFrame frame = new JFrame("IART@FEUP");
-                Query query = new Query(frame);
+                Query query = new Query(frame,handler);
                 query.init();
             }
         });
