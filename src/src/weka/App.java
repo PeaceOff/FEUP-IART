@@ -5,14 +5,12 @@ import weka.gui.treevisualizer.PlaceNode2;
 import weka.gui.treevisualizer.TreeVisualizer;
 
 import javax.swing.*;
-import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class App {
-    private JFrame frame;
-    private Container oldPanel;
     private JPanel panel;
     private JTextArea log;
     private JButton year1Button;
@@ -21,9 +19,10 @@ public class App {
     private JButton year2Button;
     private JButton year5Button;
     private JCheckBox unprunedCheckBox;
-    private JCheckBox checkBox3;
-    private JCheckBox checkBox4;
-    private JButton check_btn;
+    private JCheckBox reducedErrorPruningCheckBox;
+    private JCheckBox subTreeRaisingCheckBox;
+    private JTextField pruningConfidence;
+    private JTextField minimumNumberOfInstances;
 
     private TreeHandler handler;
 
@@ -44,26 +43,29 @@ public class App {
             e.printStackTrace();
         }
 
-        check_btn.addActionListener(new ActionListener() {
+        unprunedCheckBox.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent actionEvent) {
 
-                createFrame();
+                boolean val = !unprunedCheckBox.isSelected();
 
+
+                reducedErrorPruningCheckBox.setEnabled(val);
+                subTreeRaisingCheckBox.setEnabled(val);
+                pruningConfidence.setEnabled(val);
+                minimumNumberOfInstances.setEnabled(val);
             }
         });
-    }
 
-    public void createFrame()
-    {
-        EventQueue.invokeLater(new Runnable()
-        {
+        reducedErrorPruningCheckBox.addActionListener(new ActionListener() {
             @Override
-            public void run()
-            {
-                JFrame frame = new JFrame("IART@FEUP");
-                Query query = new Query(frame,handler);
-                query.init();
+            public void actionPerformed(ActionEvent actionEvent) {
+                boolean val = !reducedErrorPruningCheckBox.isSelected();
+
+                unprunedCheckBox.setEnabled(val);
+                subTreeRaisingCheckBox.setEnabled(val);
+                pruningConfidence.setEnabled(val);
+                minimumNumberOfInstances.setEnabled(val);
             }
         });
     }
@@ -85,15 +87,29 @@ public class App {
                 TreeVisualizer tv = null;
 
                 //set option
-                String[] options = new String[1];
+                ArrayList<String> options= new ArrayList();
 
 
                 if(unprunedCheckBox.isSelected())
-                    options[0] = "-U";
-                else
-                    options[0] = "";
+                    options.add("-U");
+                else if (reducedErrorPruningCheckBox.isSelected())
+                    options.add("-R");
+                else{
+                    if (!subTreeRaisingCheckBox.isSelected())
+                        options.add("-S");
 
-                handler.loadTree(index, options);
+                        options.add("-C");
+                        options.add(pruningConfidence.getText());
+
+                        options.add("-M");
+                        options.add(minimumNumberOfInstances.getText());
+                }
+
+
+
+                System.out.println(options.toArray(new String[0]));
+
+                handler.loadTree(index, options.toArray(new String[0]));
 
                 J48 tree = handler.getTree(index);
 
@@ -122,10 +138,6 @@ public class App {
         }
     }
 
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
-    }
-
     private void init(){
         handler = new TreeHandler("dataset/");
     }
@@ -135,7 +147,6 @@ public class App {
         JFrame frame = new JFrame("IART@FEUP");
         App app = new App();
 
-        app.setFrame(frame);
         frame.setContentPane(app.panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

@@ -74,6 +74,7 @@ public class TreeHandler {
                 k++;
             }
 
+
             res = new J48();
             res.setOptions(options);
             res.buildClassifier(train);
