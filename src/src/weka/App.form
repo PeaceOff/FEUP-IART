@@ -79,14 +79,6 @@
           <text value="unpruned"/>
         </properties>
       </component>
-      <component id="f7df2" class="javax.swing.JCheckBox" binding="checkBox2" default-binding="true">
-        <constraints>
-          <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="CheckBox"/>
-        </properties>
-      </component>
       <component id="615bc" class="javax.swing.JCheckBox" binding="checkBox3" default-binding="true">
         <constraints>
           <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -110,6 +102,14 @@
         <properties>
           <background color="-13713176"/>
           <text value="Polish companies bankruptcy using C4.5"/>
+        </properties>
+      </component>
+      <component id="64e82" class="javax.swing.JButton" binding="check_btn">
+        <constraints>
+          <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Check my Company"/>
         </properties>
       </component>
     </children>

@@ -1,5 +1,6 @@
 package weka;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -9,6 +10,10 @@ public class AttributeMapper {
 
     public static String getAttributeName(String i){
         return attributes.get(i);
+    }
+
+    public static HashMap<String ,String> get_attributes(){
+        return attributes;
     }
 
     static {

@@ -5,11 +5,14 @@ import weka.gui.treevisualizer.PlaceNode2;
 import weka.gui.treevisualizer.TreeVisualizer;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class App {
+    private JFrame frame;
+    private Container oldPanel;
     private JPanel panel;
     private JTextArea log;
     private JButton year1Button;
@@ -18,9 +21,9 @@ public class App {
     private JButton year2Button;
     private JButton year5Button;
     private JCheckBox unprunedCheckBox;
-    private JCheckBox checkBox2;
     private JCheckBox checkBox3;
     private JCheckBox checkBox4;
+    private JButton check_btn;
 
     private TreeHandler handler;
 
@@ -41,6 +44,28 @@ public class App {
             e.printStackTrace();
         }
 
+        check_btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                createFrame();
+
+            }
+        });
+    }
+
+    public static void createFrame()
+    {
+        EventQueue.invokeLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                JFrame frame = new JFrame("IART@FEUP");
+                Query query = new Query(frame);
+                query.init();
+            }
+        });
     }
 
     public class buttonHandler implements ActionListener {
@@ -97,6 +122,10 @@ public class App {
         }
     }
 
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
     private void init(){
         handler = new TreeHandler("dataset/");
     }
@@ -106,6 +135,7 @@ public class App {
         JFrame frame = new JFrame("IART@FEUP");
         App app = new App();
 
+        app.setFrame(frame);
         frame.setContentPane(app.panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
