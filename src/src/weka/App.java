@@ -27,8 +27,9 @@ public class App {
     private JCheckBox reducedErrorPruningCheckBox;
     private JCheckBox subTreeRaisingCheckBox;
     private JFormattedTextField pruningConfidence;
-    private JFormattedTextField minimumNumberOfInstances;
     private JButton checkYourOwnCompanyButton;
+    private JSpinner datasetDivision;
+    private JSpinner minimumNumberOfInstances;
 
     private TreeHandler handler;
 
@@ -36,6 +37,8 @@ public class App {
     public App() {
 
         handler = new TreeHandler("dataset/");
+        minimumNumberOfInstances.setValue(2);
+        datasetDivision.setValue(2);
 
         try {
 
@@ -114,14 +117,14 @@ public class App {
                         options.add(pruningConfidence.getText());
 
                         options.add("-M");
-                        options.add(minimumNumberOfInstances.getText());
+                        options.add((minimumNumberOfInstances.getValue()).toString());
+                        System.out.println((minimumNumberOfInstances.getValue()).toString());
                 }
 
 
 
-                System.out.println(options.toArray(new String[0]));
 
-                handler.loadTree(index, options.toArray(new String[0]));
+                handler.loadTree(index, options.toArray(new String[0]),(int)datasetDivision.getValue());
 
                 J48 tree = handler.getTree(index);
 
@@ -141,8 +144,7 @@ public class App {
 
                 log.setText(null);
                 log.append(msg);
-                log.append("Fiability of all years");
-                log.append(handler.toString());
+                log.append("\nReliability: " + handler.getReliability(index)*100 + "%");
 
             } catch (Exception e) {
                 e.printStackTrace();
